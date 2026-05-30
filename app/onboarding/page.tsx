@@ -7,8 +7,22 @@ import {
   type OnboardingFormInput,
   type OnboardingFormOutput,
 } from "@/lib/schemas/onboarding";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
+import type { User } from "@supabase/supabase-js";
+
 
 export default function OnboardingPage() {
+    const [user, setUser] = useState<User | null>(null);
+useEffect(() => {
+  async function loadUser() {
+    const { data } = await supabase.auth.getUser();
+
+    setUser(data.user);
+  }
+
+  loadUser();
+}, []);
   const {
     register,
     handleSubmit,
@@ -31,7 +45,10 @@ async function onSubmit(values: OnboardingFormOutput) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(values),
+    body: JSON.stringify({
+        userId: user?.id,
+        ...values,
+    }),
   });
 
   if (!res.ok) {

@@ -1,11 +1,11 @@
-import { onboardingSchema } from "@/lib/schemas/onboarding";
+import { onboardingApiSchema } from "@/lib/schemas/onboarding";
 
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function POST(request: Request) {
   const body = await request.json();
 
-  const parsed = onboardingSchema.safeParse(body);
+  const parsed = onboardingApiSchema.safeParse(body);
 
   if (!parsed.success) {
     return Response.json(
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     .from("user_profiles")
     .insert({
       // temporary fake ID until auth exists
-      id: crypto.randomUUID(),
+      id: input.userId,
 
       age: input.age,
       height_cm: input.heightCm,
