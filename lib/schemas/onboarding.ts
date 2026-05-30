@@ -26,11 +26,8 @@ export const onboardingApiSchema = onboardingSchema.extend({
   userId: z.uuid(),
 });
 
-export type OnboardingFormInput =
-  z.input<typeof onboardingSchema>;
+export type OnboardingFormInput = z.input<typeof onboardingSchema>;
 
-export type OnboardingFormOutput =
-  z.output<typeof onboardingSchema>;
+export type OnboardingFormOutput = z.output<typeof onboardingSchema>;
 
-export type OnboardingApiInput =
-  z.infer<typeof onboardingApiSchema>;
+export type OnboardingApiInput = z.infer<typeof onboardingApiSchema>;

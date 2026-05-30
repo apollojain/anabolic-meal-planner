@@ -14,7 +14,7 @@ import {
 
 export default function SignupPage() {
   const router = useRouter();
-    
+
   const {
     register,
     handleSubmit,
@@ -23,21 +23,19 @@ export default function SignupPage() {
     resolver: zodResolver(signupSchema),
   });
 
-  
-
   async function onSubmit(values: SignupOutput) {
-  const { error } = await supabase.auth.signUp({
-    email: values.email,
-    password: values.password,
-  });
+    const { error } = await supabase.auth.signUp({
+      email: values.email,
+      password: values.password,
+    });
 
-  if (error) {
-    console.error(error);
-    return;
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    router.push("/onboarding");
   }
-
-  router.push("/onboarding");
-}
 
   return (
     <main className="max-w-md mx-auto p-8">

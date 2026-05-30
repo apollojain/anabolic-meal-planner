@@ -7,7 +7,6 @@ export async function POST(request: Request) {
 
   const parsed = onboardingApiSchema.safeParse(body);
 
-  
   if (!parsed.success) {
     return Response.json(
       {

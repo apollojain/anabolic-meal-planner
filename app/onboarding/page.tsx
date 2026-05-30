@@ -15,16 +15,16 @@ import { useRouter } from "next/navigation";
 export default function OnboardingPage() {
   const router = useRouter();
 
-    const [user, setUser] = useState<User | null>(null);
-useEffect(() => {
-  async function loadUser() {
-    const { data } = await supabase.auth.getUser();
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    async function loadUser() {
+      const { data } = await supabase.auth.getUser();
 
-    setUser(data.user);
-  }
+      setUser(data.user);
+    }
 
-  loadUser();
-}, []);
+    loadUser();
+  }, []);
   const {
     register,
     handleSubmit,
@@ -32,47 +32,47 @@ useEffect(() => {
   } = useForm<OnboardingFormInput, unknown, OnboardingFormOutput>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
-        sex: "male",
-        goal: "maintain",
-        activityLevel: "moderate",
-        mealsPerDay: 4,
+      sex: "male",
+      goal: "maintain",
+      activityLevel: "moderate",
+      mealsPerDay: 4,
     },
-    });
-
-async function onSubmit(values: OnboardingFormOutput) {
-  console.log("FORM VALUES BEFORE FETCH:", values);
-
-    const res = await fetch("/api/onboarding", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-        userId: user?.id,
-        ...values,
-    }),
   });
 
-  if (!res.ok) {
-    const error = await res.json();
-    console.error(error);
-    return;
-  }
+  async function onSubmit(values: OnboardingFormOutput) {
+    console.log("FORM VALUES BEFORE FETCH:", values);
 
-  const data = await res.json();
-  
-  console.log("API RESPONSE:", data);
-  
-  if (res.ok) {
-    const params = new URLSearchParams({
-  calories: String(data.targets.dailyCalories),
-  protein: String(data.targets.dailyProteinG),
-  carbs: String(data.targets.dailyCarbsG),
-  fat: String(data.targets.dailyFatG),
-});
-    router.push(`/onboarding/success?${params.toString()}`);
+    const res = await fetch("/api/onboarding", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: user?.id,
+        ...values,
+      }),
+    });
+
+    if (!res.ok) {
+      const error = await res.json();
+      console.error(error);
+      return;
+    }
+
+    const data = await res.json();
+
+    console.log("API RESPONSE:", data);
+
+    if (res.ok) {
+      const params = new URLSearchParams({
+        calories: String(data.targets.dailyCalories),
+        protein: String(data.targets.dailyProteinG),
+        carbs: String(data.targets.dailyCarbsG),
+        fat: String(data.targets.dailyFatG),
+      });
+      router.push(`/onboarding/success?${params.toString()}`);
+    }
   }
-}
 
   return (
     <main className="max-w-xl mx-auto p-8">

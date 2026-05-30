@@ -41,9 +41,7 @@ export function calculateNutritionTargets(input: {
 
   const fatG = Math.round((dailyCalories * 0.25) / 9);
 
-  const carbsG = Math.round(
-    (dailyCalories - proteinG * 4 - fatG * 9) / 4
-  );
+  const carbsG = Math.round((dailyCalories - proteinG * 4 - fatG * 9) / 4);
 
   return {
     dailyCalories: Math.round(dailyCalories),
