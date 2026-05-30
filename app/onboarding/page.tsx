@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 
 export default function OnboardingPage() {
   const router = useRouter();
-  
+
     const [user, setUser] = useState<User | null>(null);
 useEffect(() => {
   async function loadUser() {
@@ -64,7 +64,13 @@ async function onSubmit(values: OnboardingFormOutput) {
   console.log("API RESPONSE:", data);
   
   if (res.ok) {
-    router.push("/onboarding/success");
+    const params = new URLSearchParams({
+  calories: String(data.targets.dailyCalories),
+  protein: String(data.targets.dailyProteinG),
+  carbs: String(data.targets.dailyCarbsG),
+  fat: String(data.targets.dailyFatG),
+});
+    router.push(`/onboarding/success?${params.toString()}`);
   }
 }
 

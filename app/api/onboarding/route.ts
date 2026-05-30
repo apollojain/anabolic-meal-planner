@@ -1,5 +1,5 @@
 import { onboardingApiSchema } from "@/lib/schemas/onboarding";
-
+import { calculateNutritionTargets } from "@/lib/nutrition";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function POST(request: Request) {
@@ -7,6 +7,7 @@ export async function POST(request: Request) {
 
   const parsed = onboardingApiSchema.safeParse(body);
 
+  
   if (!parsed.success) {
     return Response.json(
       {
@@ -43,8 +44,11 @@ export async function POST(request: Request) {
     );
   }
 
+  const targets = calculateNutritionTargets(input);
+
   return Response.json({
     success: true,
     profile: data,
+    targets,
   });
 }
