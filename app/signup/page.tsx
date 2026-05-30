@@ -26,7 +26,7 @@ export default function SignupPage() {
   
 
   async function onSubmit(values: SignupOutput) {
-  const { data, error } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email: values.email,
     password: values.password,
   });
