@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   onboardingSchema,
   type OnboardingFormInput,
+  type OnboardingFormOutput,
 } from "@/lib/schemas/onboarding";
 
 export default function OnboardingPage() {
@@ -12,26 +13,37 @@ export default function OnboardingPage() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<OnboardingFormInput>({
+  } = useForm<OnboardingFormInput, unknown, OnboardingFormOutput>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
-      sex: "male",
-      goal: "maintain",
-      activityLevel: "moderate",
-      mealsPerDay: 4,
+        sex: "male",
+        goal: "maintain",
+        activityLevel: "moderate",
+        mealsPerDay: 4,
     },
+    });
+
+async function onSubmit(values: OnboardingFormOutput) {
+  console.log("FORM VALUES BEFORE FETCH:", values);
+
+    const res = await fetch("/api/onboarding", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(values),
   });
 
-  async function onSubmit(values: OnboardingFormInput) {
-    console.log(values);
-
-    // later:
-    // await fetch("/api/profile", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(values),
-    // });
+  if (!res.ok) {
+    const error = await res.json();
+    console.error(error);
+    return;
   }
+
+  const data = await res.json();
+  
+  console.log("API RESPONSE:", data);
+}
 
   return (
     <main className="max-w-xl mx-auto p-8">
